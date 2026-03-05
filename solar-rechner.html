@@ -638,7 +638,7 @@
         <div class="card">
             <!-- Header -->
             <div class="header">
-                <div class="logo">ALGATEC</div>
+                <a href="index.html" class="logo" aria-label="ALGATEC Solar - Startseite">ALGATEC Solar</a>
                 <div class="progress-container">
                     <div class="progress-bar">
                         <div class="progress-fill" id="progressFill"></div>
@@ -964,6 +964,11 @@
                 document.getElementById('roofAreaValue').textContent = '200';
             }
             updateModuleIndicator();
+
+            // Auto-advance to next step after 500ms
+            setTimeout(() => {
+                nextStep();
+            }, 500);
         }
 
         function updateRoofArea(value) {
@@ -983,6 +988,11 @@
             document.querySelectorAll('[data-step="3"] .compass-btn').forEach(el => el.classList.remove('selected'));
             event.target.closest('.compass-btn').classList.add('selected');
             document.getElementById('efficiencyIndicator').textContent = `Effizienz: ${efficiency}%`;
+
+            // Auto-advance to next step after 500ms
+            setTimeout(() => {
+                nextStep();
+            }, 500);
         }
 
         function selectPitch(type, factor) {
@@ -990,6 +1000,11 @@
             calculator.pitchFactor = factor;
             document.querySelectorAll('[data-step="4"] .option-card').forEach(el => el.classList.remove('selected'));
             event.target.closest('.option-card').classList.add('selected');
+
+            // Auto-advance to next step after 500ms
+            setTimeout(() => {
+                nextStep();
+            }, 500);
         }
 
         function selectQuickConsumption(value) {
@@ -1121,7 +1136,8 @@
 
             // Show/hide navigation
             const navButtons = document.getElementById('navigationButtons');
-            if (calculator.currentStep === 9) {
+            // Hide on step 1 (tiles auto-advance) and step 9 (thank you)
+            if (calculator.currentStep === 1 || calculator.currentStep === 9) {
                 navButtons.style.display = 'none';
             } else {
                 navButtons.style.display = 'block';

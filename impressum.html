@@ -67,16 +67,27 @@
         }
 
         .logo {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
             text-decoration: none;
             transition: var(--transition);
         }
 
-        .logo:hover {
-            color: var(--secondary);
+        .logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        .company-name {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .logo:hover .company-name {
+            color: var(--accent);
             transform: translateX(5px);
         }
 
@@ -388,7 +399,10 @@
     <!-- Header -->
     <header>
         <div class="header-content">
-            <a href="index.html" class="logo">ALGATEC Solar</a>
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="ALGATEC Solar Logo" width="40" height="40">
+                <span class="company-name">ALGATEC Solar</span>
+            </a>
             <nav>
                 <a href="index.html">Startseite</a>
                 <a href="blog.html">Blog</a>

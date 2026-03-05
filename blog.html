@@ -52,16 +52,27 @@
         }
 
         .logo {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
             text-decoration: none;
             transition: var(--transition);
         }
 
-        .logo:hover {
-            color: var(--secondary);
+        .logo img {
+            height: 40px;
+            width: auto;
+        }
+
+        .company-name {
+            font-family: 'Outfit', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--text);
+        }
+
+        .logo:hover .company-name {
+            color: var(--accent);
         }
 
         nav {
@@ -81,6 +92,26 @@
         nav a:hover,
         nav a.active {
             color: var(--accent);
+        }
+
+        .nav-cta {
+            padding: 0.6rem 1.5rem;
+            background: var(--accent);
+            color: var(--primary);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-block;
+            font-family: 'DM Sans', sans-serif;
+        }
+
+        .nav-cta:hover {
+            background: #f9c668;
+            transform: translateY(-2px);
         }
 
         /* Hero Section */
@@ -527,14 +558,19 @@
     <!-- Header -->
     <header>
         <div class="header-content">
-            <a href="index.html" class="logo">ALGATEC</a>
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="ALGATEC Solar Logo" width="40" height="40">
+                <span class="company-name">ALGATEC Solar</span>
+            </a>
             <nav>
-                <a href="index.html">Startseite</a>
-                <a href="#leistungen">Leistungen</a>
-                <a href="#ueber">Über uns</a>
+                <a href="index.html#about">Über uns</a>
+                <a href="index.html#services">Leistungen</a>
+                <a href="solar-rechner.html">Rechner</a>
+                <a href="index.html#projects">Projekte</a>
                 <a href="blog.html" class="active">Blog</a>
-                <a href="#kontakt">Kontakt</a>
+                <a href="index.html#contact">Kontakt</a>
             </nav>
+            <a href="solar-rechner.html" class="nav-cta">Rechner starten</a>
         </div>
     </header>
 
