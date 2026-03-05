@@ -245,6 +245,99 @@
             font-weight: 600;
         }
 
+        .address-input-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .address-input-icon {
+            position: absolute;
+            left: 16px;
+            font-size: 20px;
+            color: var(--primary-gold);
+            pointer-events: none;
+        }
+
+        .address-input {
+            width: 100%;
+            padding: 14px 16px 14px 48px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-family: "DM Sans", sans-serif;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .address-input:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+            background: rgba(245, 166, 35, 0.05);
+        }
+
+        .address-input::placeholder {
+            color: var(--text-secondary);
+        }
+
+        .analyze-btn {
+            width: 100%;
+            padding: 14px 16px;
+            background: linear-gradient(90deg, var(--primary-gold), #FF9800);
+            border: none;
+            border-radius: 10px;
+            color: var(--dark-bg);
+            font-family: "Outfit", sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .analyze-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(245, 166, 35, 0.3);
+        }
+
+        .analyze-btn:active {
+            transform: translateY(0);
+        }
+
+        .analyze-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(0, 0, 0, 0.3);
+            border-top-color: var(--dark-bg);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .analysis-result {
+            padding: 12px 16px;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid var(--primary-green);
+            border-radius: 8px;
+            color: var(--primary-green);
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
         .compass {
             display: grid;
             grid-template-columns: repeat(3, 80px);
@@ -400,6 +493,7 @@
         .result-item:nth-child(4) { animation-delay: 0.4s; }
         .result-item:nth-child(5) { animation-delay: 0.5s; }
         .result-item:nth-child(6) { animation-delay: 0.6s; }
+        .result-item:nth-child(7) { animation-delay: 0.7s; }
 
         .result-label {
             font-size: 13px;
@@ -643,12 +737,24 @@
                     <div class="progress-bar">
                         <div class="progress-fill" id="progressFill"></div>
                     </div>
-                    <div class="progress-text" id="progressText">Schritt 1 von 8</div>
+                    <div class="progress-text" id="progressText">Schritt 1 von 10</div>
                 </div>
             </div>
 
-            <!-- Step 1: Building Type -->
+            <!-- Step 1: Address Input (NEW) -->
             <div class="step active" data-step="1">
+                <h1>Adresse eingeben</h1>
+                <p class="subtitle">Beginnen Sie mit Ihrer Adresse für eine genaue Dachanalyse</p>
+                <div class="address-input-container">
+                    <span class="address-input-icon">🏠</span>
+                    <input type="text" id="addressInput" class="address-input" placeholder="z.B. Musterstraße 123, 10115 Berlin" maxlength="100">
+                </div>
+                <button type="button" class="analyze-btn" id="analyzeBtn" onclick="analyzeRoof()">Dach analysieren</button>
+                <div id="analysisResult" style="display: none;" class="analysis-result"></div>
+            </div>
+
+            <!-- Step 2: Building Type (formerly Step 1) -->
+            <div class="step" data-step="2">
                 <h1>Berechnen Sie Ihr Solar-Potenzial in 60 Sekunden</h1>
                 <p class="subtitle">Kostenlos & unverbindlich</p>
                 <div class="cards-grid">
@@ -690,8 +796,8 @@
                 </div>
             </div>
 
-            <!-- Step 2: Roof Area -->
-            <div class="step" data-step="2">
+            <!-- Step 3: Roof Area -->
+            <div class="step" data-step="3">
                 <h1>Dachfläche</h1>
                 <p class="subtitle">Wie groß ist Ihre nutzbare Dachfläche?</p>
                 <div class="slider-container">
@@ -704,8 +810,8 @@
                 <div class="module-indicator" id="moduleIndicator">≈ 40 Module</div>
             </div>
 
-            <!-- Step 3: Roof Orientation -->
-            <div class="step" data-step="3">
+            <!-- Step 4: Roof Orientation -->
+            <div class="step" data-step="4">
                 <h1>Dachausrichtung</h1>
                 <p class="subtitle">Wohin zeigt Ihr Dach?</p>
                 <div class="compass">
@@ -719,8 +825,8 @@
                 <div class="efficiency-indicator" id="efficiencyIndicator">Effizienz: 100%</div>
             </div>
 
-            <!-- Step 4: Roof Pitch -->
-            <div class="step" data-step="4">
+            <!-- Step 5: Roof Pitch -->
+            <div class="step" data-step="5">
                 <h1>Dachneigung</h1>
                 <p class="subtitle">Welcher Neigungswinkel?</p>
                 <div class="cards-grid">
@@ -747,8 +853,8 @@
                 </div>
             </div>
 
-            <!-- Step 5: Electricity Consumption -->
-            <div class="step" data-step="5">
+            <!-- Step 6: Electricity Consumption -->
+            <div class="step" data-step="6">
                 <h1>Stromverbrauch</h1>
                 <p class="subtitle">Wie viel Strom verbrauchen Sie pro Jahr?</p>
                 <div id="quickSelectContainer" class="quick-select"></div>
@@ -762,8 +868,8 @@
                 <div class="module-indicator" id="costEstimate">Monatliche Kosten: ~72€</div>
             </div>
 
-            <!-- Step 6: Electricity Price -->
-            <div class="step" data-step="6">
+            <!-- Step 7: Electricity Price -->
+            <div class="step" data-step="7">
                 <h1>Strompreis</h1>
                 <p class="subtitle">Wie viel kostet Ihr Strom?</p>
                 <div class="slider-container">
@@ -776,8 +882,8 @@
                 <div class="module-indicator">Deutscher Durchschnitt: 0.35€/kWh</div>
             </div>
 
-            <!-- Step 7: Results -->
-            <div class="step" data-step="7" style="padding: 0; margin: -40px -30px 0 -30px;">
+            <!-- Step 8: Results -->
+            <div class="step" data-step="8" style="padding: 0; margin: -40px -30px 0 -30px;">
                 <div style="padding: 40px 30px 0 30px;">
                     <h1>Ihr Solar-Potenzial</h1>
                     <p class="subtitle">Personalisierte Analyse basierend auf Ihren Angaben</p>
@@ -823,6 +929,12 @@
                         <div class="result-subtext">Systemkosten / Jährliche Ersparnis</div>
                     </div>
 
+                    <div class="result-item" style="opacity: 0.85;">
+                        <div class="result-label">Geschätzte Systemkosten</div>
+                        <div class="result-value" style="font-size: 28px; color: var(--text-primary);" id="systemCostValue">€12,000</div>
+                        <div class="result-subtext">Inkl. Installation & Inbetriebnahme</div>
+                    </div>
+
                     <div class="result-item">
                         <div class="result-label">25-Jahres-Gesamtersparnis</div>
                         <div class="result-value" id="totalSavings">€59,984</div>
@@ -831,10 +943,10 @@
                 </div>
             </div>
 
-            <!-- Step 8: Lead Capture -->
-            <div class="step" data-step="8">
-                <h1>Ihr persönliches Solar-Gutachten</h1>
-                <p class="subtitle">Sichern Sie sich jetzt Ihre kostenlose Analyse</p>
+            <!-- Step 9: Lead Capture -->
+            <div class="step" data-step="9">
+                <h1>Ihre detaillierte Analyse erhalten</h1>
+                <p class="subtitle">Für ein vollständiges Gutachten mit allen Details und Fördermöglichkeiten — lassen Sie uns Ihre Daten zukommen.</p>
                 <form onsubmit="submitLead(event)" id="leadForm">
                     <div class="form-group">
                         <label>Name</label>
@@ -843,14 +955,7 @@
                     <div class="form-group">
                         <label>E-Mail</label>
                         <input type="email" name="email" required placeholder="max@beispiel.de">
-                    </div>
-                    <div class="form-group">
-                        <label>Telefon (optional)</label>
-                        <input type="tel" name="phone" placeholder="+49 (0)1234 567890">
-                    </div>
-                    <div class="form-group">
-                        <label>Postleitzahl</label>
-                        <input type="text" name="plz" required placeholder="75001">
+                        <div style="font-size: 12px; color: var(--text-secondary); margin-top: 8px;">Wir senden Ihnen Ihr persönliches Gutachten per E-Mail</div>
                     </div>
                     <div class="trust-indicators">
                         <div class="trust-item">Kostenlos & unverbindlich</div>
@@ -862,7 +967,7 @@
             </div>
 
             <!-- Thank You Screen -->
-            <div class="step" data-step="9" style="padding: 60px 30px;">
+            <div class="step" data-step="10" style="padding: 60px 30px;">
                 <div class="thank-you">
                     <h2>Vielen Dank!</h2>
                     <p>Ihre Solar-Analyse wird verarbeitet.<br>Wir melden uns innerhalb von 24 Stunden bei Ihnen mit Ihrem persönlichen Gutachten.</p>
@@ -893,7 +998,8 @@
             electricityPrice: 0.35,
             withBattery: false,
             currentStep: 1,
-            totalSteps: 9
+            totalSteps: 10,
+            address: null
         };
 
         const orientationFactors = {
@@ -948,9 +1054,59 @@
             ).join('');
         }
 
+        function analyzeRoof() {
+            const addressInput = document.getElementById('addressInput');
+            const address = addressInput.value.trim();
+
+            if (!address) {
+                alert('Bitte geben Sie eine Adresse ein');
+                return;
+            }
+
+            calculator.address = address;
+
+            const btn = document.getElementById('analyzeBtn');
+            const resultDiv = document.getElementById('analysisResult');
+
+            // Show loading state
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading-spinner"></span>Analysiere Dach...';
+            resultDiv.style.display = 'none';
+
+            // Simulate API call with 1.5s delay
+            setTimeout(() => {
+                // TODO: Replace with real Google Solar API call
+                // API: GET https://solar.googleapis.com/v1/buildingInsights:findClosest
+                //   ?location.latitude=${lat}&location.longitude=${lng}&key=YOUR_API_KEY
+                // First geocode address via Google Geocoding API
+                // Response provides: roofSegmentStats (area), maxArrayPanelsCount, yearlyEnergyDcKwh
+
+                // Mock data for now - randomize roof area between 60-120 for residential
+                const estimatedArea = Math.floor(Math.random() * 61) + 60; // 60-120
+
+                calculator.roofArea = estimatedArea;
+                document.getElementById('roofAreaSlider').value = estimatedArea;
+                document.getElementById('roofAreaValue').textContent = estimatedArea;
+                updateModuleIndicator();
+
+                // Show result
+                resultDiv.innerHTML = `Basierend auf Satellitenbildern Ihrer Adresse<br>Dachfläche: ~${estimatedArea}m²`;
+                resultDiv.style.display = 'block';
+
+                // Reset button
+                btn.disabled = false;
+                btn.innerHTML = 'Dach analysieren';
+
+                // Auto-advance to next step after 800ms
+                setTimeout(() => {
+                    nextStep();
+                }, 800);
+            }, 1500);
+        }
+
         function selectBuildingType(type) {
             calculator.buildingType = type;
-            document.querySelectorAll('[data-step="1"] .option-card').forEach(el => el.classList.remove('selected'));
+            document.querySelectorAll('[data-step="2"] .option-card').forEach(el => el.classList.remove('selected'));
             event.target.closest('.option-card').classList.add('selected');
 
             // Set default values based on type
@@ -985,7 +1141,7 @@
         function selectOrientation(direction, efficiency) {
             calculator.orientation = direction;
             calculator.orientationFactor = efficiency / 100;
-            document.querySelectorAll('[data-step="3"] .compass-btn').forEach(el => el.classList.remove('selected'));
+            document.querySelectorAll('[data-step="4"] .compass-btn').forEach(el => el.classList.remove('selected'));
             event.target.closest('.compass-btn').classList.add('selected');
             document.getElementById('efficiencyIndicator').textContent = `Effizienz: ${efficiency}%`;
 
@@ -998,7 +1154,7 @@
         function selectPitch(type, factor) {
             calculator.pitch = type;
             calculator.pitchFactor = factor;
-            document.querySelectorAll('[data-step="4"] .option-card').forEach(el => el.classList.remove('selected'));
+            document.querySelectorAll('[data-step="5"] .option-card').forEach(el => el.classList.remove('selected'));
             event.target.closest('.option-card').classList.add('selected');
 
             // Auto-advance to next step after 500ms
@@ -1081,38 +1237,43 @@
             document.getElementById('co2Equivalent').textContent = `≈ ${treeEquivalent} Bäumen`;
 
             document.getElementById('paybackTime').textContent = paybackYears.toFixed(1) + ' Jahre';
+            document.getElementById('systemCostValue').textContent = '€' + Math.round(systemCost).toLocaleString('de-DE');
             document.getElementById('totalSavings').textContent = '€' + Math.round(totalSavings25y).toLocaleString('de-DE');
         }
 
         function nextStep() {
             // Validate current step
-            if (calculator.currentStep === 1 && !calculator.buildingType) {
+            if (calculator.currentStep === 1 && !calculator.address) {
+                alert('Bitte geben Sie Ihre Adresse ein');
+                return;
+            }
+            if (calculator.currentStep === 2 && !calculator.buildingType) {
                 alert('Bitte wählen Sie einen Gebäudetyp');
                 return;
             }
-            if (calculator.currentStep === 2 && !calculator.roofArea) {
+            if (calculator.currentStep === 3 && !calculator.roofArea) {
                 alert('Bitte wählen Sie eine Dachfläche');
                 return;
             }
-            if (calculator.currentStep === 3 && !calculator.orientation) {
+            if (calculator.currentStep === 4 && !calculator.orientation) {
                 alert('Bitte wählen Sie eine Dachausrichtung');
                 return;
             }
-            if (calculator.currentStep === 4 && !calculator.pitch) {
+            if (calculator.currentStep === 5 && !calculator.pitch) {
                 alert('Bitte wählen Sie eine Dachneigung');
                 return;
             }
-            if (calculator.currentStep === 5 && !calculator.consumption) {
+            if (calculator.currentStep === 6 && !calculator.consumption) {
                 alert('Bitte wählen Sie einen Stromverbrauch');
                 return;
             }
-            if (calculator.currentStep === 6 && !calculator.electricityPrice) {
+            if (calculator.currentStep === 7 && !calculator.electricityPrice) {
                 alert('Bitte wählen Sie einen Strompreis');
                 return;
             }
 
             // Calculate results before showing results page
-            if (calculator.currentStep === 6) {
+            if (calculator.currentStep === 7) {
                 calculateResults();
             }
 
@@ -1136,8 +1297,8 @@
 
             // Show/hide navigation
             const navButtons = document.getElementById('navigationButtons');
-            // Hide on step 1 (tiles auto-advance) and step 9 (thank you)
-            if (calculator.currentStep === 1 || calculator.currentStep === 9) {
+            // Hide on step 1 (address input auto-advance) and step 10 (thank you)
+            if (calculator.currentStep === 1 || calculator.currentStep === 10) {
                 navButtons.style.display = 'none';
             } else {
                 navButtons.style.display = 'block';
@@ -1145,9 +1306,9 @@
 
             // Update next button text
             const nextBtn = document.getElementById('nextBtn');
-            if (calculator.currentStep === 7) {
+            if (calculator.currentStep === 8) {
                 nextBtn.textContent = 'Kontaktdaten eingeben →';
-            } else if (calculator.currentStep === 8) {
+            } else if (calculator.currentStep === 9) {
                 nextBtn.textContent = 'Gutachten anfordern';
                 nextBtn.style.display = 'none';
             } else {
@@ -1159,9 +1320,9 @@
         }
 
         function updateProgress() {
-            const progressPercent = (calculator.currentStep / 8) * 100;
+            const progressPercent = (calculator.currentStep / 9) * 100;
             document.getElementById('progressFill').style.width = progressPercent + '%';
-            document.getElementById('progressText').textContent = `Schritt ${calculator.currentStep} von 8`;
+            document.getElementById('progressText').textContent = `Schritt ${calculator.currentStep} von 10`;
         }
 
         function submitLead(event) {
@@ -1170,8 +1331,7 @@
             const formData = {
                 name: document.querySelector('input[name="name"]').value,
                 email: document.querySelector('input[name="email"]').value,
-                phone: document.querySelector('input[name="phone"]').value,
-                plz: document.querySelector('input[name="plz"]').value,
+                address: calculator.address,
                 buildingType: calculator.buildingType,
                 roofArea: calculator.roofArea,
                 orientation: calculator.orientation,
@@ -1186,12 +1346,13 @@
             console.log('Lead submitted:', formData);
 
             // Show thank you
-            calculator.currentStep = 9;
+            calculator.currentStep = 10;
             showStep();
         }
 
         function restartCalculator() {
             // Reset state
+            calculator.address = null;
             calculator.buildingType = null;
             calculator.roofArea = 80;
             calculator.orientation = 'sued';
@@ -1204,6 +1365,8 @@
             calculator.currentStep = 1;
 
             // Reset UI
+            document.getElementById('addressInput').value = '';
+            document.getElementById('analysisResult').style.display = 'none';
             document.querySelectorAll('.option-card.selected, .compass-btn.selected').forEach(el => {
                 el.classList.remove('selected');
             });
